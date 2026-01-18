@@ -32,32 +32,40 @@ runs:
         # Run bina and capture output
         bina check ${{ inputs.path }} --json > bina_report.json
         
-        # Parse JSON and create annotations (simple bash/python script inline)
-        python3 -c "
-import json
-import sys
+        # Parse JSON and create annotations
+        python3 - <<EOF
+        import json
+        import sys
 
-try:
-    with open('bina_report.json') as f:
-        findings = json.load(f)
+        try:
+            with open('bina_report.json') as f:
+                findings = json.load(f)
 
-    fail_workflow = False
-    for f in findings:
-        severity = f['severity']
-        # Map to GitHub annotation levels: notice, warning, failure
-        level = 'notice'
-        if severity == 'MEDIUM':
-            level = 'warning'
-        elif severity == 'HIGH':
-            level = 'error'
-            if '${{ inputs.fail_on_high }}' == 'true':
-                fail_workflow = True
+            fail_workflow = False
+            for f in findings:
+                severity = f['severity']
+                # Map to GitHub annotation levels: notice, warning, failure
+                level = 'notice'
+                if severity == 'MEDIUM':
+                    level = 'warning'
+                elif severity == 'HIGH':
+                    level = 'error'
+                    # Note: We must be careful with boolean injection from inputs in python
+                    if '${{ inputs.fail_on_high }}' == 'true':
+                        fail_workflow = True
 
-        print(f'::{level} file={f['file']},line={f['line']},col={f['column']},title={f['rule_id']}::{f['message']}')
+                # Fix: Use proper quoting for f-string and keys
+                msg = f['message']
+                r_id = f['rule_id']
+                fname = f['file']
+                line = f['line']
+                col = f['column']
+                print(f"::{level} file={fname},line={line},col={col},title={r_id}::{msg}")
 
-    if fail_workflow:
-        sys.exit(1)
-except Exception as e:
-    print(e)
-"
+            if fail_workflow:
+                sys.exit(1)
+        except Exception as e:
+            print(e)
+            sys.exit(1)
+        EOF
       shell: bash
