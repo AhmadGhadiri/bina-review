@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.1] - 2026-01-19
+
+### 🚀 Version 0.3.1: Rule Profiles & Categories
+- **Rule Categories**: All built-in rules now declare a category (e.g., `correctness`, `security`, `performance`).
+- **Rule Profiles**: Enable rules via high-level profiles like `strict`, `security`, or `performance`.
+- **Custom Profiles**: Support for defining team-specific profiles in `bina.yaml`.
+- **Precedence Logic**: Implemented granular configuration precedence where individual rule overrides take priority over profile settings.
+- **CLI Support**: New `--profile` flag to override configuration on the fly.
+- **Future Planning**: Added `FUTURE_IMPROVEMENTS.md` to track strict validation requirements.
+
 ## [v0.3.0] - 2026-01-19
 
 ### 🚀 Version 3: Custom Rules API & Open Source

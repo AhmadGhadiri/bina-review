@@ -21,6 +21,7 @@ class MisleadingNameRule(BaseRule):
     name = "Misleading Name"
     description = "Misleading function name."
     severity = Severity.LOW
+    category = "style"
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
         name = node.name.lower()

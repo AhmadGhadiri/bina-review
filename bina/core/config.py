@@ -20,6 +20,13 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Any
 from .models import Severity
 
+DEFAULT_PROFILES = {
+    "default": ["correctness", "security", "maintainability"],
+    "strict": ["correctness", "security", "performance", "architecture", "maintainability", "style", "uncategorized"],
+    "security": ["correctness", "security"],
+    "performance": ["performance"]
+}
+
 @dataclass
 class RuleConfig:
     severity: Optional[Severity] = None
@@ -30,6 +37,8 @@ class Config:
     rules: Dict[str, RuleConfig] = field(default_factory=dict)
     exclude: List[str] = field(default_factory=list)
     custom_rules: List[str] = field(default_factory=list)
+    profile: str = "default"
+    profiles: Dict[str, List[str]] = field(default_factory=dict)
 
     @classmethod
     def load(cls, path: str = "bina.yaml") -> 'Config':
@@ -75,12 +84,30 @@ class Config:
              if not isinstance(custom_rules, list):
                  custom_rules = []
 
-        return cls(rules=rules, exclude=exclude, custom_rules=custom_rules)
+        profile = data.get('profile', 'default')
+        if not isinstance(profile, str):
+            profile = 'default'
 
-    def is_rule_enabled(self, rule_id: str) -> bool:
-        if rule_id in self.rules:
-            return self.rules[rule_id].enabled
-        return True
+        profiles = {}
+        if 'profiles' in data and isinstance(data['profiles'], dict):
+            for p_name, p_content in data['profiles'].items():
+                if isinstance(p_content, list):
+                    profiles[p_name] = p_content
+
+        return cls(rules=rules, exclude=exclude, custom_rules=custom_rules, profile=profile, profiles=profiles)
+
+    def is_rule_enabled(self, rule: Any, override_profile: Optional[str] = None) -> bool:
+        # 1. Individual rule override (highest precedence)
+        if rule.id in self.rules:
+            return self.rules[rule.id].enabled
+        
+        # 2. Profile-based enablement
+        active_profile = override_profile or self.profile
+        active_categories = self.profiles.get(active_profile)
+        if active_categories is None:
+            active_categories = DEFAULT_PROFILES.get(active_profile, DEFAULT_PROFILES["default"])
+            
+        return rule.category in active_categories
 
     def get_rule_severity(self, rule_id: str, default_severity: Severity) -> Severity:
         if rule_id in self.rules and self.rules[rule_id].severity:

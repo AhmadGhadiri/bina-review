@@ -21,6 +21,7 @@ class MutableDefaultRule(BaseRule):
     name = "Mutable Default"
     description = "Mutable default argument detected."
     severity = Severity.MEDIUM
+    category = "maintainability"
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
         for default in node.args.defaults:
@@ -36,6 +37,7 @@ class SilentExceptionRule(BaseRule):
     name = "Silent Exception"
     description = "Silent exception swallowing detected."
     severity = Severity.HIGH
+    category = "maintainability"
 
     def visit_ExceptHandler(self, node: ast.ExceptHandler):
         # Check for bare except or except Exception
@@ -62,6 +64,7 @@ class ResourceCleanupRule(BaseRule):
     name = "Resource Cleanup"
     description = "Resource usage without proper cleanup (open without with)."
     severity = Severity.MEDIUM
+    category = "performance"
 
     def __init__(self):
         super().__init__()

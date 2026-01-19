@@ -7,8 +7,47 @@ It focuses on logical correctness, edge cases, and misleading patterns without u
 - **Deterministic**: No AI, no guessing.
 - **Fast**: AST-based analysis and multiprocessing.
 - **Custom Rules API**: Write your own rules in Python.
+- **Rule Profiles & Categories**: Group rules by category and enable them using high-level profiles (e.g., `strict`, `security`).
 - **Baseline Mode**: Focus on new issues by ignoring technical debt.
 - **CI Integrated**: Ready for GitHub Actions.
+
+## Rule Profiles
+
+Bina allows you to enable sets of rules using **profiles**. You can choose from built-in profiles or define your own.
+
+### Built-in Profiles
+
+| Profile | Categories Included |
+|---|---|
+| `default` | `correctness`, `security`, `maintainability` |
+| `strict` | All categories (`correctness`, `security`, `performance`, `architecture`, `maintainability`, `style`, `uncategorized`) |
+| `security` | `correctness`, `security` |
+| `performance` | `performance` |
+
+### Configuration (`bina.yaml`)
+
+Specify the profile in your configuration:
+
+```yaml
+profile: security
+
+# You can also define custom profiles
+profiles:
+  my-team:
+    - correctness
+    - maintainability
+
+# Individual rule settings have HIGHER precedence than profiles
+rules:
+  L001: OFF # Disable this rule even if included in the profile
+```
+
+### Usage
+
+Override the profile via CLI:
+```bash
+bina check . --profile strict
+```
 
 ## Installation
 ```bash

@@ -38,7 +38,7 @@ class PythonAnalyzer:
             for rule in rules:
                 # Check config if provided
                 if config:
-                    if not config.is_rule_enabled(rule.id):
+                    if not config.is_rule_enabled(rule):
                         continue
 
                 # Pass tree and context to rule

@@ -56,7 +56,7 @@ class BaseRule(ast.NodeVisitor):
     name: str = ""
     description: str = ""
     severity: Severity = Severity.MEDIUM
-    category: Optional[str] = None
+    category: str = "uncategorized"
 
     def __init__(self):
         self._findings: List[Finding] = []

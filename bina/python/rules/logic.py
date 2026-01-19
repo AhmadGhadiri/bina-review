@@ -21,6 +21,7 @@ class InfiniteLoopRule(BaseRule):
     name = "Infinite Loop"
     description = "Potential infinite loop."
     severity = Severity.HIGH
+    category = "correctness"
 
     def visit_While(self, node: ast.While):
         # Check for `while True` or `while 1`
@@ -50,6 +51,7 @@ class SortedUniquePromiseRule(BaseRule):
     name = "Sorted/Unique Promise"
     description = "Functions claiming sorted/unique output without enforcing it."
     severity = Severity.LOW
+    category = "correctness"
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
         name = node.name.lower()
@@ -85,6 +87,7 @@ class UncheckedNoneRule(BaseRule):
     name = "Unchecked None Dereference"
     description = "Unchecked None dereference (Control Flow Aware)."
     severity = Severity.HIGH
+    category = "correctness"
 
     def visit_FunctionDef(self, node: ast.FunctionDef):
         # We track set of currently 'dangerous' variables (assigned None)

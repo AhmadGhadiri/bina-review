@@ -35,13 +35,16 @@ def main():
 @click.option("--baseline", "baseline_path", default="bina-report-baseline.json", help="Path to baseline file")
 @click.option("--generate-baseline", is_flag=True, help="Generate a new baseline from current findings")
 @click.option("--show-baseline", is_flag=True, help="Show baseline issues in report")
-def check(path, json_output, config_path, baseline_path, generate_baseline, show_baseline):
+@click.option("--profile", help="Rule profile to use (e.g., security, strict)")
+def check(path, json_output, config_path, baseline_path, generate_baseline, show_baseline, profile):
     """Run static analysis on the given path."""
     from .core.config import Config
     from .core.baseline import BaselineManager
 
     # Load Config
     config = Config.load(config_path)
+    if profile:
+        config.profile = profile
     
     # Load Baseline Manager
     baseline_manager = BaselineManager(baseline_path)
