@@ -7,7 +7,7 @@ from .core.registry import RuleRegistry
 # Import rules to register them
 import bina.python.rules
 
-console = Console()
+console = Console(stderr=True)
 
 @click.group()
 def main():
@@ -115,14 +115,14 @@ def ci_report(report_path, baseline_path):
     if ref and "pull" in ref:
         try:
             pr_number = int(ref.split("/")[2])
-        except:
+        except (ValueError, IndexError, AttributeError):
              pass
     
     # Allow explicit PR number override
     if os.environ.get("GITHUB_PR_NUMBER"):
         try:
              pr_number = int(os.environ.get("GITHUB_PR_NUMBER"))
-        except:
+        except ValueError:
              pass
 
     if not all([token, repo, pr_number]):

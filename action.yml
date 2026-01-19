@@ -69,13 +69,15 @@ runs:
         # I'll modify CLI later to support "TEE" output?
         # For now, let's keep it simple. The user gets the GitHub Comment.
         
-        # 3. Post Report to GitHub
-        # We pass the token explicitly or via env?
-        export GITHUB_TOKEN="${{ inputs.token }}"
-        # Need PR number or context
-        export GITHUB_PR_NUMBER="${{ github.event.pull_request.number }}"
-        
-        bina ci-report bina_output.json --baseline ${{ inputs.baseline_path }}
+        # 3. Post Report to GitHub (Only on PRs)
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+            export GITHUB_TOKEN="${{ inputs.token }}"
+            export GITHUB_PR_NUMBER="${{ github.event.pull_request.number }}"
+            
+            if [ -f bina_output.json ]; then
+                bina ci-report bina_output.json --baseline ${{ inputs.baseline_path }}
+            fi
+        fi
         
         # 4. Fail if needed (Fail on High)
         if [ "${{ inputs.fail_on_high }}" == "true" ]; then

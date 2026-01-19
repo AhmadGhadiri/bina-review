@@ -1,4 +1,5 @@
 import ast
+import sys
 from typing import List
 from ..core.models import Finding
 from ..core.registry import RuleRegistry
@@ -42,7 +43,7 @@ class PythonAnalyzer:
                 except Exception as e:
                     # Generic error handling to prevent one rule from crashing everything
                     # In a real tool we might log this or report as an error finding
-                    print(f"Error running rule {rule.id} on {file_path}: {e}")
+                    print(f"Error running rule {rule.id} on {file_path}: {e}", file=sys.stderr)
             
             return findings
 
@@ -50,5 +51,5 @@ class PythonAnalyzer:
             # We could report syntax errors as findings too
             return []
         except Exception as e:
-            print(f"Error parsing {file_path}: {e}")
+            print(f"Error parsing {file_path}: {e}", file=sys.stderr)
             return []

@@ -1,5 +1,6 @@
 import yaml
 import os
+import sys
 import glob
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional, Any
@@ -26,7 +27,7 @@ class Config:
         except Exception as e:
             # Fallback to defaults on error? Or raise?
             # For now, print warning and return default
-            print(f"Warning: Failed to load config from {path}: {e}")
+            print(f"Warning: Failed to load config from {path}: {e}", file=sys.stderr)
             return cls()
 
         rules = {}
