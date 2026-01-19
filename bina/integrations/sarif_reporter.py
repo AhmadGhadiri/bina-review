@@ -37,7 +37,7 @@ class SarifReporter:
                         "driver": {
                             "name": "Bina",
                             "semanticVersion": "0.3.2",
-                            "informationUri": "https://github.com/AhmadGhadiri/bina-review",
+                            "informationUri": "https://github.com/bonyad-labs/bina-review",
                             "rules": self._get_sarif_rules(rules)
                         }
                     },

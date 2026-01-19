@@ -87,7 +87,7 @@ steps:
   - uses: actions/checkout@v3
   
   - name: Run Bina Static Analysis
-    uses: AhmadGhadiri/bina-review@v1
+    uses: bonyad-labs/bina-review@v1
     with:
       path: .
       fail_on_high: true

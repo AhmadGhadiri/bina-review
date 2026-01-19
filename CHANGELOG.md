@@ -51,7 +51,7 @@ All notable changes to this project will be documented in this file.
 
 ### 🚀 Features
 
-- **GitHub Action Support**: Official GitHub Action (`AhmadGhadiri/bina-review`) for easy integration into CI/CD pipelines.
+- **GitHub Action Support**: Official GitHub Action (`bonyad-labs/bina-review`) for easy integration into CI/CD pipelines.
 - **Rich Output**: Enhanced CLI and GitHub Action logs with beautifully formatted tables using `rich`.
 - **Actionable Suggestions**: Validation findings now include a "Suggestion" column providing specific advice on how to fix the issue.
 - **Core Rules**: Includes 7 deterministic rules focusing on logical correctness and best practices:
