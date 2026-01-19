@@ -9,7 +9,26 @@ It focuses on logical correctness, edge cases, and misleading patterns without u
 - **Custom Rules API**: Write your own rules in Python.
 - **Rule Profiles & Categories**: Group rules by category and enable them using high-level profiles (e.g., `strict`, `security`).
 - **Baseline Mode**: Focus on new issues by ignoring technical debt.
+- **SARIF Support**: Export results in v2.1.0 format for GitHub Code Scanning.
 - **CI Integrated**: Ready for GitHub Actions.
+
+## SARIF Output
+
+Bina can export analysis results in the SARIF v2.1.0 format. This is useful for integration with GitHub Code Scanning or other static analysis platforms.
+
+### Configuration (`bina.yaml`)
+
+```yaml
+output:
+  sarif: true
+  sarif_path: results.sarif
+```
+
+### Usage
+
+```bash
+bina check . --sarif MyReport.sarif
+```
 
 ## Rule Profiles
 

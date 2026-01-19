@@ -36,7 +36,8 @@ def main():
 @click.option("--generate-baseline", is_flag=True, help="Generate a new baseline from current findings")
 @click.option("--show-baseline", is_flag=True, help="Show baseline issues in report")
 @click.option("--profile", help="Rule profile to use (e.g., security, strict)")
-def check(path, json_output, config_path, baseline_path, generate_baseline, show_baseline, profile):
+@click.option("--sarif", "sarif_out", help="Output findings in SARIF format to the specified path")
+def check(path, json_output, config_path, baseline_path, generate_baseline, show_baseline, profile, sarif_out):
     """Run static analysis on the given path."""
     from .core.config import Config
     from .core.baseline import BaselineManager
@@ -45,6 +46,9 @@ def check(path, json_output, config_path, baseline_path, generate_baseline, show
     config = Config.load(config_path)
     if profile:
         config.profile = profile
+    if sarif_out:
+        config.sarif_enabled = True
+        config.sarif_path = sarif_out
     
     # Load Baseline Manager
     baseline_manager = BaselineManager(baseline_path)
@@ -108,6 +112,15 @@ def check(path, json_output, config_path, baseline_path, generate_baseline, show
             )
         
         console.print(table)
+        
+        # SARIF Export
+        if config.sarif_enabled:
+            from .integrations.sarif_reporter import SarifReporter
+            sarif_reporter = SarifReporter(config.sarif_path)
+            sarif_reporter.save_report(findings)
+            if not json_output:
+                console.print(f"[bold green]SARIF report saved to {config.sarif_path}[/bold green]")
+
         # Exit with error code if issues found
         exit(1)
 

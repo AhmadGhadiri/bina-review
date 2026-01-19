@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.2] - 2026-01-19
+
+### 🚀 Version 0.3.2: SARIF Output Support
+- **SARIF Integration**: Added support for exporting analysis results in SARIF v2.1.0 format.
+- **GitHub Code Scanning**: Findings can now be consumed by GitHub's security features.
+- **New Reporter**: Implemented `SarifReporter` for schema-compliant JSON generation.
+- **CLI & Config**: New `--sarif` flag and `output.sarif` configuration options.
+
 ## [v0.3.1] - 2026-01-19
 
 ### 🚀 Version 0.3.1: Rule Profiles & Categories

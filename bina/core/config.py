@@ -39,6 +39,8 @@ class Config:
     custom_rules: List[str] = field(default_factory=list)
     profile: str = "default"
     profiles: Dict[str, List[str]] = field(default_factory=dict)
+    sarif_enabled: bool = False
+    sarif_path: str = "bina-review.sarif"
 
     @classmethod
     def load(cls, path: str = "bina.yaml") -> 'Config':
@@ -94,7 +96,22 @@ class Config:
                 if isinstance(p_content, list):
                     profiles[p_name] = p_content
 
-        return cls(rules=rules, exclude=exclude, custom_rules=custom_rules, profile=profile, profiles=profiles)
+        sarif_enabled = False
+        sarif_path = "bina-review.sarif"
+        if 'output' in data and isinstance(data['output'], dict):
+            output_cfg = data['output']
+            sarif_enabled = bool(output_cfg.get('sarif', False))
+            sarif_path = output_cfg.get('sarif_path', sarif_path)
+
+        return cls(
+            rules=rules, 
+            exclude=exclude, 
+            custom_rules=custom_rules, 
+            profile=profile, 
+            profiles=profiles,
+            sarif_enabled=sarif_enabled,
+            sarif_path=sarif_path
+        )
 
     def is_rule_enabled(self, rule: Any, override_profile: Optional[str] = None) -> bool:
         # 1. Individual rule override (highest precedence)
