@@ -36,10 +36,38 @@ runs:
         python3 - <<EOF
         import json
         import sys
+        try:
+            from rich.console import Console
+            from rich.table import Table
+        except ImportError:
+            print("Rich library not found, skipping table output")
+            Console = None
+            Table = None
 
         try:
             with open('bina_report.json') as f:
                 findings = json.load(f)
+
+            # Print Rich Table if available
+            if Console and Table:
+                console = Console()
+                if findings:
+                    table = Table(title="Analysis Findings")
+                    table.add_column("File", style="cyan")
+                    table.add_column("Rule", style="magenta")
+                    table.add_column("Severity", style="red")
+                    table.add_column("Message", style="white")
+
+                    for f in findings:
+                        table.add_row(
+                            f"{f['file']}:{f['line']}",
+                            f['rule_id'],
+                            f['severity'],
+                            f['message']
+                        )
+                    console.print(table)
+                else:
+                    console.print("[bold green]No issues found![/bold green]")
 
             fail_workflow = False
             for f in findings:
