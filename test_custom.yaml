@@ -1,0 +1,5 @@
+rules:
+  L003: HIGH
+custom_rules:
+  paths:
+    - "./custom_rules"

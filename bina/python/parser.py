@@ -27,8 +27,8 @@ class PythonAnalyzer:
             
             tree = ast.parse(code, filename=file_path)
             
-            # Get Python rules
-            rules = RuleRegistry.get_rules_for_language("python")
+            # Get all registered rules
+            rules = RuleRegistry.get_all_rules()
             findings = []
 
             # Create Context
@@ -41,12 +41,9 @@ class PythonAnalyzer:
                     if not config.is_rule_enabled(rule.id):
                         continue
 
-                # Pass context to rule
+                # Pass tree and context to rule
                 try:
-                    # We need to detect if rule accepts context or old args?
-                    # For V2, we enforce new signature or wrap it.
-                    # Since we control the codebase, we update all rules.
-                    results = rule.check_fn(context)
+                    results = rule.analyze(tree, context)
                     if results:
                         # Apply severity overrides
                         if config:
@@ -55,8 +52,6 @@ class PythonAnalyzer:
                                 r.severity = severity
                         findings.extend(results)
                 except Exception as e:
-                    # Generic error handling to prevent one rule from crashing everything
-                    # In a real tool we might log this or report as an error finding
                     print(f"Error running rule {rule.id} on {file_path}: {e}", file=sys.stderr)
             
             return findings

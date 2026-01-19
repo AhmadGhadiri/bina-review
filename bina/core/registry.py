@@ -12,39 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Callable, Dict, List, Type, Any, Optional
-from dataclasses import dataclass
-from .models import Finding, Severity
-
-@dataclass
-class RuleDefinition:
-    id: str
-    description: str
-    severity: Severity
-    language: str  # e.g., "python"
-    check_fn: Callable[..., List[Finding]]
+from typing import Dict, List, Optional
+from .models import BaseRule
 
 class RuleRegistry:
-    _rules: Dict[str, RuleDefinition] = {}
+    _rules: Dict[str, BaseRule] = {}
 
     @classmethod
-    def register(cls, id: str, description: str, severity: Severity, language: str = "python"):
-        """Decorator to register a rule."""
-        def decorator(func: Callable):
-            cls._rules[id] = RuleDefinition(
-                id=id,
-                description=description,
-                severity=severity,
-                language=language,
-                check_fn=func
-            )
-            return func
-        return decorator
+    def register_rule(cls, rule: BaseRule):
+        """Register a rule instance."""
+        cls._rules[rule.id] = rule
 
     @classmethod
-    def get_rules_for_language(cls, language: str) -> List[RuleDefinition]:
-        return [r for r in cls._rules.values() if r.language == language]
+    def get_rule(cls, rule_id: str) -> Optional[BaseRule]:
+        return cls._rules.get(rule_id)
 
     @classmethod
-    def get_all_rules(cls) -> List[RuleDefinition]:
+    def get_all_rules(cls) -> List[BaseRule]:
         return list(cls._rules.values())
+
+    @classmethod
+    def clear(cls):
+        cls._rules = {}

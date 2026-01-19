@@ -15,3 +15,15 @@
 from . import best_practices
 from . import logic
 from . import naming
+from ...core.registry import RuleRegistry
+
+# Register built-in rules
+RuleRegistry.register_rule(logic.InfiniteLoopRule())
+RuleRegistry.register_rule(logic.SortedUniquePromiseRule())
+RuleRegistry.register_rule(logic.UncheckedNoneRule())
+
+RuleRegistry.register_rule(best_practices.MutableDefaultRule())
+RuleRegistry.register_rule(best_practices.SilentExceptionRule())
+RuleRegistry.register_rule(best_practices.ResourceCleanupRule())
+
+RuleRegistry.register_rule(naming.MisleadingNameRule())

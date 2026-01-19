@@ -20,6 +20,7 @@ from .models import Finding
 from .registry import RuleRegistry
 from .config import Config
 from .baseline import BaselineManager
+from .loader import RuleLoader
 
 # Worker function must be top-level for pickling
 def analyze_file_wrapper(args):
@@ -29,11 +30,27 @@ def analyze_file_wrapper(args):
         return PythonAnalyzer.analyze(file_path, config=config)
     return []
 
+def initialize_worker(custom_rule_paths: List[str]):
+    """Initialize worker process by adding custom rule paths to sys.path and loading them."""
+    import sys
+    from .loader import RuleLoader
+    from .registry import RuleRegistry
+    for path in custom_rule_paths:
+        rules = RuleLoader.load_from_directory(path)
+        for rule in rules:
+            RuleRegistry.register_rule(rule)
+
 class Engine:
     def __init__(self, config: Optional[Config] = None, baseline_manager: Optional[BaselineManager] = None):
-        self.registry = RuleRegistry()
         self.config = config or Config()
         self.baseline_manager = baseline_manager
+        
+        # Load custom rules if any
+        from .registry import RuleRegistry
+        for path in self.config.custom_rules:
+            rules = RuleLoader.load_from_directory(path)
+            for rule in rules:
+                RuleRegistry.register_rule(rule)
 
     def scan_path(self, path: str) -> List[Finding]:
         findings = []
@@ -60,7 +77,11 @@ class Engine:
         # Max workers = cpu_count
         max_workers = os.cpu_count() or 1
         
-        with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
+        with concurrent.futures.ProcessPoolExecutor(
+            max_workers=max_workers,
+            initializer=initialize_worker,
+            initargs=(self.config.custom_rules,)
+        ) as executor:
             # Prepare args
             tasks = [(f, self.config) for f in files_to_scan]
             results = executor.map(analyze_file_wrapper, tasks)

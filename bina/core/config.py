@@ -29,6 +29,7 @@ class RuleConfig:
 class Config:
     rules: Dict[str, RuleConfig] = field(default_factory=dict)
     exclude: List[str] = field(default_factory=list)
+    custom_rules: List[str] = field(default_factory=list)
 
     @classmethod
     def load(cls, path: str = "bina.yaml") -> 'Config':
@@ -68,7 +69,13 @@ class Config:
         if not isinstance(exclude, list):
             exclude = []
 
-        return cls(rules=rules, exclude=exclude)
+        custom_rules = []
+        if 'custom_rules' in data and isinstance(data['custom_rules'], dict):
+             custom_rules = data['custom_rules'].get('paths', [])
+             if not isinstance(custom_rules, list):
+                 custom_rules = []
+
+        return cls(rules=rules, exclude=exclude, custom_rules=custom_rules)
 
     def is_rule_enabled(self, rule_id: str) -> bool:
         if rule_id in self.rules:

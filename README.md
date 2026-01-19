@@ -3,10 +3,12 @@
 **Bina** is a deterministic, rule-based static analysis tool for Python.
 It focuses on logical correctness, edge cases, and misleading patterns without using AI or heuristics.
 
-## Features (v1)
+## Features (v3)
 - **Deterministic**: No AI, no guessing.
-- **Fast**: AST-based analysis.
-- **Rule-based**: easy to extend.
+- **Fast**: AST-based analysis and multiprocessing.
+- **Custom Rules API**: Write your own rules in Python.
+- **Baseline Mode**: Focus on new issues by ignoring technical debt.
+- **CI Integrated**: Ready for GitHub Actions.
 
 ## Installation
 ```bash
