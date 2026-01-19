@@ -85,7 +85,7 @@ class SarifReporter:
                     {
                         "physicalLocation": {
                             "artifactLocation": {
-                                "uri": f.file
+                                "uri": os.path.relpath(f.file) if os.path.isabs(f.file) else f.file
                             },
                             "region": {
                                 "startLine": f.line,
