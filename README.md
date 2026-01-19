@@ -1,16 +1,61 @@
-# Bina (بینا)
+# Bina Static Analysis (بینا)
 
-**Bina** is a deterministic, rule-based static analysis tool for Python.
-It focuses on logical correctness, edge cases, and misleading patterns without using AI or heuristics.
+**Deterministic, rule-based static analysis for Python — with profiles, baselines, and GitHub-native feedback.**
 
-## Features (v3)
+Bina focuses on **logical correctness, edge cases, and misleading patterns** without using AI, heuristics, or probabilistic models.  
+The goal is **predictable, explainable results** that teams can adopt gradually.
+
+---
+
+## 🚀 Quick Start (GitHub Actions)
+
+Add Bina to your repository in **under 1 minute**:
+
+```yaml
+name: Bina Static Analysis
+on: [pull_request, push]
+
+jobs:
+  bina:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Bina Static Analysis
+        uses: bonyad-labs/bina-review@main # Use @v1 or @main
+        with:
+          path: .
+          fail_on_high: true
+```
+
+## Features
 - **Deterministic**: No AI, no guessing.
 - **Fast**: AST-based analysis and multiprocessing.
 - **Custom Rules API**: Write your own rules in Python.
 - **Rule Profiles & Categories**: Group rules by category and enable them using high-level profiles (e.g., `strict`, `security`).
 - **Baseline Mode**: Focus on new issues by ignoring technical debt.
 - **SARIF Support**: Export results in v2.1.0 format for GitHub Code Scanning.
-- **CI Integrated**: Ready for GitHub Actions.
+
+## Who is this for?
+Bina is ideal for:
+- Teams introducing static analysis gradually
+- Codebases with existing technical debt
+- Organizations needing custom, deterministic rules
+
+Bina is **NOT**:
+- A replacement for security scanners
+- An AI-based code reviewer
+
+## 🛠 Local Usage
+
+If you want to run Bina locally:
+
+```bash
+# Install (Once published)
+pip install bina-review
+
+# Run a check
+bina check .
+```
 
 ## SARIF Output
 
@@ -24,8 +69,7 @@ output:
   sarif_path: results.sarif
 ```
 
-### Usage
-
+### CLI Override
 ```bash
 bina check . --sarif MyReport.sarif
 ```
@@ -59,38 +103,6 @@ profiles:
 # Individual rule settings have HIGHER precedence than profiles
 rules:
   L001: OFF # Disable this rule even if included in the profile
-```
-
-### Usage
-
-Override the profile via CLI:
-```bash
-bina check . --profile strict
-```
-
-## Installation
-```bash
-poetry install
-```
-
-## Usage
-```bash
-poetry run bina check <path_to_file_or_dir>
-```
-
-## GitHub Action Usage
-
-To use Bina in your own repository, add this to your `.github/workflows/main.yml`:
-
-```yaml
-steps:
-  - uses: actions/checkout@v3
-  
-  - name: Run Bina Static Analysis
-    uses: bonyad-labs/bina-review@v1
-    with:
-      path: .
-      fail_on_high: true
 ```
 
 ## License
