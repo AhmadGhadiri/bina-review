@@ -1,7 +1,13 @@
 # Bina Static Analysis (بینا)
 
-**Deterministic, rule-based static analysis for Python — with profiles, baselines, and GitHub-native feedback.**
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![CI](https://github.com/Bonyad-Labs/bina-review/actions/workflows/bina-check.yml/badge.svg)](https://github.com/Bonyad-Labs/bina-review/actions/workflows/bina-check.yml)
+[![Release](https://img.shields.io/github/v/release/Bonyad-Labs/bina-review)](https://github.com/Bonyad-Labs/bina-review/releases)
+[![Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-Bina%20Static%20Analysis-blue?logo=github)](https://github.com/marketplace/actions/bina-static-analysis)
+
+
+**Deterministic, rule-based static analysis for Python — with profiles, baselines, and GitHub-native feedback.**
 Bina focuses on **logical correctness, edge cases, and misleading patterns** without using AI, heuristics, or probabilistic models.  
 The goal is **predictable, explainable results** that teams can adopt gradually.
 
