@@ -18,8 +18,8 @@ class Engine:
             for root, _, files in os.walk(path):
                 for file in files:
                     full_path = os.path.join(root, file)
-                    # Skip hidden directories like .git
-                    if any(part.startswith('.') for part in full_path.split(os.sep)):
+                    # Skip hidden directories like .git, but allow . and ..
+                    if any(part.startswith('.') and part not in ('.', '..') for part in full_path.split(os.sep)):
                         continue
                     findings.extend(self._analyze_file(full_path))
         return findings
