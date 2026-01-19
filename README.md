@@ -16,45 +16,56 @@ name: Bina Static Analysis
 on: [pull_request, push]
 
 jobs:
-  bina:
+  bina-analysis:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      security-events: write
     steps:
       - uses: actions/checkout@v3
       - name: Run Bina Static Analysis
-        uses: bonyad-labs/bina-review@main # Use @v1 or @main
+        uses: bonyad-labs/bina-review@v1
         with:
           path: .
           fail_on_high: true
 ```
 
+## ## Why Bina?
+Bina differs from other static analysis tools by prioritizing developer trust and predictability:
+- **Deterministic**: No AI or heuristics. Results are predictable and can be reproduced locally.
+- **Baseline Mode**: Ideal for legacy codebases. Focus only on new issues by ignoring existing technical debt.
+- **Custom Rule Engine**: Write your own rules in pure Python using a familiar Class-based API.
+- **Gradual Adoption**: Designed for CI environments where stability is more important than catching every possible false-positive.
+
 ## Features
 - **Deterministic**: No AI, no guessing.
 - **Fast**: AST-based analysis and multiprocessing.
-- **Custom Rules API**: Write your own rules in Python.
-- **Rule Profiles & Categories**: Group rules by category and enable them using high-level profiles (e.g., `strict`, `security`).
-- **Baseline Mode**: Focus on new issues by ignoring technical debt.
+- **Rule Profiles & Categories**: Group rules by category and enable them using high-level profiles.
 - **SARIF Support**: Export results in v2.1.0 format for GitHub Code Scanning.
 
-## Who is this for?
-Bina is ideal for:
-- Teams introducing static analysis gradually
-- Codebases with existing technical debt
-- Organizations needing custom, deterministic rules
+## GitHub Action Inputs
 
-Bina is **NOT**:
-- A replacement for security scanners
-- An AI-based code reviewer
+| Input | Description | Default |
+| --- | --- | --- |
+| `path` | Path to the directory or file to scan. | `.` |
+| `fail_on_high` | If `true`, the action fails if any HIGH severity issues are found. | `true` |
+| `config_path` | Path to the `bina.yaml` configuration file. | `bina.yaml` |
+| `baseline_path` | Path to the baseline report file. | `bina-report-baseline.json` |
 
 ## 🛠 Local Usage
 
-If you want to run Bina locally:
+Run Bina on your local machine using the CLI:
 
 ```bash
-# Install (Once published)
+# Install the tool
 pip install bina-review
 
-# Run a check
+# Scan a directory
 bina check .
+
+# Scan with a specific profile
+bina check . --profile strict
 ```
 
 ## SARIF Output
@@ -69,11 +80,6 @@ output:
   sarif_path: results.sarif
 ```
 
-### CLI Override
-```bash
-bina check . --sarif MyReport.sarif
-```
-
 ## Rule Profiles
 
 Bina allows you to enable sets of rules using **profiles**. You can choose from built-in profiles or define your own.
@@ -83,27 +89,9 @@ Bina allows you to enable sets of rules using **profiles**. You can choose from 
 | Profile | Categories Included |
 |---|---|
 | `default` | `correctness`, `security`, `maintainability` |
-| `strict` | All categories (`correctness`, `security`, `performance`, `architecture`, `maintainability`, `style`, `uncategorized`) |
+| `strict` | All categories |
 | `security` | `correctness`, `security` |
 | `performance` | `performance` |
-
-### Configuration (`bina.yaml`)
-
-Specify the profile in your configuration:
-
-```yaml
-profile: security
-
-# You can also define custom profiles
-profiles:
-  my-team:
-    - correctness
-    - maintainability
-
-# Individual rule settings have HIGHER precedence than profiles
-rules:
-  L001: OFF # Disable this rule even if included in the profile
-```
 
 ## License
 
