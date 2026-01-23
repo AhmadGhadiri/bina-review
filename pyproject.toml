@@ -1,8 +1,10 @@
 [tool.poetry]
-name = "bina"
-version = "0.1.0"
+name = "bina-review"
+version = "0.3.3"
 description = "Deterministic, rule-based static analysis tool for Python."
 authors = ["Bina Team"]
+homepage = "https://github.com/Bonyad-Labs/bina-review"
+repository = "https://github.com/Bonyad-Labs/bina-review"
 readme = "README.md"
 packages = [{include = "bina"}]
 
