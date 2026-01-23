@@ -13,6 +13,28 @@ Bina provides **deterministic, high-precision results** by analyzing AST pattern
 
 ---
 
+## 🌍 Real World Examples
+
+Bina is designed to be high-precision and stable across major open-source projects.
+
+### [FastAPI](https://github.com/fastapi/fastapi)
+Scanning the core FastAPI package reveals complex logic and potential improvements:
+
+#### Local Scan Results
+![Bina running against FastAPI Locally](docs/images/fastapi_scan.png)
+
+#### GitHub Action PR Report
+![Bina GitHub Action report for FastAPI](docs/images/fastapi_action.png)
+
+### [Requests](https://github.com/psf/requests)
+Running Bina against the popular Requests library confirms code quality and logical consistency:
+
+#### Local Scan Results
+![Bina running against Requests Locally](docs/images/requests_scan.png)
+
+#### GitHub Action PR Report
+![Bina GitHub Action report for Requests](docs/images/requests_action.png)
+
 ## 🚀 Quick Start (GitHub Actions)
 
 Add Bina to your repository in **under 1 minute**:
@@ -45,27 +67,6 @@ jobs:
 - Incorrect exception handling patterns
 - Risky control-flow constructs
 
-## 🌍 Real World Examples
-
-Bina is designed to be high-precision and stable across major open-source projects.
-
-### [FastAPI](https://github.com/fastapi/fastapi)
-Scanning the core FastAPI package reveals complex logic and potential improvements:
-
-#### Local Scan Results
-![Bina running against FastAPI Locally](docs/images/fastapi_scan.png)
-
-#### GitHub Action PR Report
-![Bina GitHub Action report for FastAPI](docs/images/fastapi_action.png)
-
-### [Requests](https://github.com/psf/requests)
-Running Bina against the popular Requests library confirms code quality and logical consistency:
-
-#### Local Scan Results
-![Bina running against Requests Locally](docs/images/requests_scan.png)
-
-#### GitHub Action PR Report
-![Bina GitHub Action report for Requests](docs/images/requests_action.png)
 
 ### 🤔 Why not just use linters or AI tools?
 
