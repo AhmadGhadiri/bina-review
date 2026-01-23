@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.4] - 2026-01-23
+
+### 🏗 PyPI Publication
+- **Package Relocation**: Renamed package to `bina-review` on PyPI to ensure name availability.
+- **Automated Publishing**: Integrated GitHub Actions for automatic releases to PyPI upon tag creation.
+- **Improved Metadata**: Enhanced `pyproject.toml` with project URLs and repository links for better PyPI presence.
+
 ## [v0.3.3] - 2026-01-23
 
 ### 🚀 Improved Logical Analysis & Multi-Path Support
